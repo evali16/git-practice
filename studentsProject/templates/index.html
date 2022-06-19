@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>학생 점수 관리</title>
+    <style>
+        h1 {
+            text-align: center;
+        }
+
+        .img-score {
+            margin-left: calc(50% - 300px);
+        }
+
+        .input-container {
+            width: 80%;
+            display: flex;
+
+            margin-left: 32%;
+            margin-top: 10px;
+
+        }
+
+        .button-container {
+            width: 80%;
+            display: flex;
+            margin-left: 45%;
+            margin-top: 10px;
+        }
+
+        .sort-container {
+            width: 80%;
+            display: flex;
+            margin-left: 42%;
+            margin-top: 10px;
+        }
+
+        .list-container {
+            width: 80%;
+            display: flex;
+            margin-left: 39%;
+            margin-top: 10px;
+        }
+
+
+    </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+</head>
+<body>
+    <h1>학생 점수 관리 시스템</h1>
+    <img class="img-score" src="{{ url_for('static', filename='score.jpg') }}">
+    <div class="input-container">
+        학생이름: <input id="student-name" type="text">
+        국어: <input id="student-korean" type="number" min="0" max="100">
+        수학: <input id="student-math" type="number" min="0" max="100">
+        영어: <input id="student-english" type="number" min="0" max="100">
+    </div>
+    <div class="button-container">
+        <button id="save-btn" onclick="saveBtnClick()">저장</button>
+        <button id="del-btn" onclick="delBtnClick()">삭제</button>
+        <button id="retouch-btn" onclick="retouchBtnClick()">수정</button>
+    </div>
+    <div class="sort-container">
+        국어: <input type="radio" name="chk_sort" value="KOR">
+        수학: <input type="radio" name="chk_sort" value="MTH">
+        영어: <input type="radio" name="chk_sort" value="ENG">
+        <button id="sort-btn" onclick="sortBtnClick()">정렬</button>
+    </div>
+    <div class="list-container">
+        <ul id="student-list">
+
+        </ul>
+    </div>
+    <script>
+         $.ajax({
+            type: "GET",
+            url: "/student",
+            data: {},
+            success: function(response) {
+                for (let student of response) {
+                    $("#student-list").append(`
+                        <li>
+                            ${student.name},
+                            국어: ${student.korean},
+                            수학: ${student.math},
+                            영어: ${student.english}
+                            <br>
+                        </li>
+                    `)
+                }
+            }
+         })
+
+         function saveBtnClick() {
+            const studentName = $("#student-name").val()
+            const studentKorean = $("#student-korean").val()
+            const studentMath = $("#student-math").val()
+            const studentEnglish = $("#student-english").val()
+
+            $.ajax({
+                type: "POST",
+                url: "/student",
+                data: {
+                    "name": studentName,
+                    "korean": studentKorean,
+                    "math": studentMath,
+                    "english": studentEnglish
+                },
+                success: function(response) {
+                    alert("저장이 완료되었습니다")
+                    location.reload()
+                }
+            })
+         }
+
+         function delBtnClick() {
+            const studentName = $("#student-name").val()
+            $.ajax({
+                type: "DELETE",
+                url: `/student?name=${studentName}`,
+                data: {},
+                success: function(response) {
+                    alert("삭제가 완료되었습니다")
+                    location.reload()
+                }
+            })
+         }
+
+         function retouchBtnClick() {
+
+            let studentName = $("#student-name").val()
+            let studentKorean = $("#student-korean").val()
+            let studentMath = $("#student-math").val()
+            let studentEnglish = $("#student-english").val()
+
+            $.ajax({
+                type: "PUT",
+                url: "/student",
+                data: {
+                    "name": studentName,
+                    "korean": studentKorean,
+                    "math": studentMath,
+                    "english": studentEnglish
+                },
+                success: function(response) {
+                    alert("수정이 완료되었습니다")
+                    location.reload()
+                }
+            })
+         }
+
+         function sortBtnClick() {
+            let checked = $('input[name=chk_sort]:checked').val();
+            if (checked === "KOR") {
+                sortKorean()
+            }
+
+            if (checked === "MTH") {
+                sortMath()
+            }
+
+            if (checked === "ENG") {
+                sortEnglish()
+            }
+         }
+
+         function sortKorean() {
+            const li = document.getElementById("student-list")
+            while (li.hasChildNodes()) {
+                li.removeChild(li.firstChild);
+            }
+            $.ajax({
+                type: "GET",
+                url: "/student/sortk",
+                data: {},
+                success: function(response) {
+                    for (let student of response) {
+                        $("#student-list").append(`
+                            <li>
+                                ${student.name},
+                                국어: ${student.korean},
+                                수학: ${student.math},
+                                영어: ${student.english}
+                            </li>
+                        `)
+                    }
+                    alert("국어 점수로 정렬합니다")
+
+                }
+            })
+
+         }
+
+         function sortMath() {
+
+            const li = document.getElementById("student-list")
+            while (li.hasChildNodes()) {
+                li.removeChild(li.firstChild);
+            }
+            $.ajax({
+                type: "GET",
+                url: "/student/sortm",
+                data: {},
+                success: function(response) {
+                    for (let student of response) {
+                        $("#student-list").append(`
+                            <li>
+                                ${student.name},
+                                국어: ${student.korean},
+                                수학: ${student.math},
+                                영어: ${student.english}
+                            </li>
+                        `)
+                    }
+                    alert("수학 점수로 정렬합니다")
+
+                }
+            })
+
+         }
+
+         function sortEnglish() {
+
+            const li = document.getElementById("student-list")
+            while (li.hasChildNodes()) {
+                li.removeChild(li.firstChild);
+            }
+            $.ajax({
+                type: "GET",
+                url: "/student/sorte",
+                data: {},
+                success: function(response) {
+                    for (let student of response) {
+                        $("#student-list").append(`
+                            <li>
+                                ${student.name},
+                                국어: ${student.korean},
+                                수학: ${student.math},
+                                영어: ${student.english}
+                            </li>
+                        `)
+                    }
+                    alert("영어 점수로 정렬합니다")
+
+                }
+            })
+
+         }
+
+
+
+
+    </script>
+
+</body>
+</html>
