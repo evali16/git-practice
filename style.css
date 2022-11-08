@@ -1,0 +1,35 @@
+.viewer{position:relative;margin:20px 0}
+#deonViewer{width:67%;margin:0 auto}
+#deonViewer img{padding:40px 20px;border:.5px solid #eee;user-select:none;-moz-user-select:none}
+#dummy{display:none}
+.loader{width:100%;height:100%;position:absolute;background:rgba(0,0,0,.5);z-index:1;top:0}
+img.draggable{cursor:e-resize}
+/* @media screen and (max-width:1030px){#deonViewer img{width:100%}}
+@media screen and (max-width:992px){.hidePhone{display:none}.btnDiv{zoom:.7}}
+@media screen and (max-width:1250px){#deonViewer img{padding:40px 0}#deonViewer{width:95%}}
+@media screen and (max-width:767px){.fork{width:100px;position:absolute!important}h1{margin-top:60px}} */
+
+#rotate {
+  width: 70%;
+  height: 70%;
+  transform-origin: 0px 0px;
+  transform: scale(1) translate(0px, 0px);
+  cursor: grab;
+}
+div#rotate > img {
+  width: 100%;
+  height: auto;
+}
+
+.img-magnifier-container {
+  position:relative;
+}
+.img-magnifier-glass {
+  position: absolute;
+  border: 3px solid #000;
+  border-radius: 50%;
+  cursor: none;
+  /*Set the size of the magnifier glass:*/
+  width: 150px;
+  height: 150px;
+}

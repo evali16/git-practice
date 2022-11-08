@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>360 Deg Product Viewer test</title>
+    <script src="deon360Viewer.js"></script>
+    <script src="magnify.js"></script>
+    <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+    
+    <div id="deonViewer">
+        <div id="rotate"></div>
+    </div>
+    <div id="dummy"></div>
+    <script>
+        const ringPath = './img/ring/';
+        //deon360Viewer(imgDivid, count, path, imgType, playable, autoPlay, drag, scroll);
+        deon360Viewer('rotate', 36, ringPath, 'jpg', false, false, true, false);
+    
+    </script>
+
+</body>
+</html>
